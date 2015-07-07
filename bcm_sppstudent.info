@@ -1,0 +1,12 @@
+name = Berklee Summer Performance Program (SPP) Student  
+description = This is a custom module to validate and create Berklee SPP student. Currently it's in beta stage
+package = Berklee College of Music
+files[] = bcm_sppstudent.install
+files[] = bcm_sppstudent.module
+project = "bcm_sppstudent"
+datestamp = "1373037332"
+version = "7.x-1.0-beta1"
+core = 7.x
+configure = admin/config/people/bcm_sppstudent
+
+
