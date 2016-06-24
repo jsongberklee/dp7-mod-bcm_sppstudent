@@ -215,7 +215,7 @@ function bcm_sppstudent_account_create_form_submit($form, &$form_state){
 function bcm_sppstudent_init() {
 	
   if(user_is_anonymous()){
-		drupal_add_css(drupal_get_path('module', 'bcm_sppstudent') . '/bcm_sppstudent.css');
+		//drupal_add_css(drupal_get_path('module', 'bcm_sppstudent') . '/bcm_sppstudent.css');
 		drupal_add_js(drupal_get_path('module', 'bcm_sppstudent') . '/bcm_sppstudent.js');
   }
 }
