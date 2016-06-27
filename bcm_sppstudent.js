@@ -2,7 +2,7 @@
 jQuery(document).ready(function($) {
 	var $loginBlockContent = $("#block-menu-menu-login-menu .content nav");
 	var ssolink = $("#block-menu-menu-login-menu .content nav li a").attr("href");
-	var spphtml = '<h3 class="login" role="button" tabindex="0" aria-controls="login-options">Login</h3><nav id="login-options" class="login" style="opacity: 0;"><a href="'+ssolink+'" class="login" title="">Campus students, faculty, staff, and alumni<span class="description"></span></a><a href="/spp/account" class="login" title="">First time login for 5 week student<span class="description"></span></a><a href="/user" class="login" title="">5 week student<span class="description"></span></a></nav>';
+	var spphtml = '<h3 class="login" role="button" tabindex="0" aria-controls="login-options">Login</h3><nav id="login-options" class="login" style="opacity: 0;"><a href="'+ssolink+'" class="login" title="">Campus students, faculty, staff, and alumni<span class="description"></span></a><a href="/user" class="login" title="">Summer Program Student<span class="description"></span></a></nav>';
 	$loginBlockContent.replaceWith(spphtml);
 	
   var loginLogout = $('#block-menu-menu-login-menu');

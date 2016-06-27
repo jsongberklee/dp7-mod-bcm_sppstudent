@@ -189,26 +189,25 @@ function bcm_sppstudent_account_create_form_validate($form, &$form_state){
 function bcm_sppstudent_account_create_form_submit($form, &$form_state){
 
 	$fields = array(
-	    'name' => $form_state['input']['emailconfirm'],
-	    'mail' => $form_state['input']['emailconfirm'],
-	    'pass' => $form_state['input']['password']['pass2'],
-	    'status' => 1,
-	    'init' => $form_state['input']['emailconfirm'],
-	    'roles' => array(DRUPAL_AUTHENTICATED_RID => 'authenticated user','21' => 'student spp',),
-	    'field_ldap_id' => array('und' => array( 0 => array('value' => $form_state['input']['berkleeid'],),),),
-	    'field_ldap_info' => array('und' => array( 0 => array('value' => 'Summer Performance Program ',),),),
-	    'field_ldap_displayname' => array('und' => array( 0 => array('value' => $form_state['input']['displayname'],),),),
+		'name' => $form_state['input']['emailconfirm'],
+		'mail' => $form_state['input']['emailconfirm'],
+		'pass' => $form_state['input']['password']['pass2'],
+		'status' => 1,
+		'init' => $form_state['input']['emailconfirm'],
+		'roles' => array(DRUPAL_AUTHENTICATED_RID => 'authenticated user','1008' => 'student spp',),
+		'field_ldap_id' => array('und' => array( 0 => array('value' => $form_state['input']['berkleeid'],),),),
+		'field_ldap_info' => array('und' => array( 0 => array('value' => 'Summer Performance Program ',),),),
+		'field_ldap_displayname' => array('und' => array( 0 => array('value' => $form_state['input']['displayname'],),),),
 	);
 	
 	$newuser = user_save('', $fields);	$now = date('Y-m-d H:i:s', time());
 	$update = db_update('bcm_sppstudent')->fields(array('registered' => 1, 'created' => $now))->condition('bcmid', $form_state['input']['berkleeid'], '=')->execute();
 	drupal_set_message(t('Your account has been created, your username is "'.$newuser->name.'". Remember, we do not email your password for security reason, if you ever need to change the username and/or password, you have to contact Learning Center Staff.'));	 	
 	
-	$form_state['redirect'] = 'user';
+	$form_state['redirect'] = 'home';
 }
 
-
-/*************************************************************************************************************************************************************************************
+/**
 * Implements hook_init()
 * @description : add the sppstudent login to the login link
 */
@@ -222,7 +221,7 @@ function bcm_sppstudent_init() {
 * Implements hook_form_FORM_ID_alter()
 * @description : insert 'spp/account' link in the general user login block form
 */
-function bcm_sppstudent_form_user_login_block_alter(&$form){
+function bcm_sppstudent_form_user_login_block_alter(&$form, &$form_state){
 	_bcm_sppstudent_user_login_form_alter($form, $form_state);
 }
 /**
@@ -232,15 +231,58 @@ function bcm_sppstudent_form_user_login_block_alter(&$form){
 function bcm_sppstudent_form_user_login_alter(&$form, &$form_state){
 	_bcm_sppstudent_user_login_form_alter($form, $form_state);
 }
+
 function _bcm_sppstudent_user_login_form_alter(&$form, &$form_state){
 	$form['name']['#weight'] = 1; $form['pass']['#weight'] = 2;
-	$form['sppstudent'] = array('#markup' => '<div id="spp-note" style="color:red"><a href="'.url("spp/account").'">*Click here to create your accout first if never logged in this site before</a></div>', '#weight'=> 0); 
+	$form['sppstudent'] = array('#markup' => '<div class="messages warning"><a href="'.url("spp/account").'" style="margin-left:8px; font-style:bold; color:#000;"> * Click here to create your accout first if never logged in this site before.</a></div>', '#weight'=> 0); 
 	$form['name']['#title'] = "Login email";
-	$form['name']['#description'] = "Your registered email address with Berklee 5 week program";
+	$form['name']['#description'] = "Your registered email address with Berklee Summer Program";
 	$form['pass']['#description'] = "The password you created for the Learning Center account";
 	
-	drupal_set_title("5 week student login");
+	drupal_set_title("Summer Program Student Login");
+	
+	/* this wouldn't work currently due to "noreqnewpass" module *
+	$user_login_final_validate_index = array_search('user_login_final_validate', $form['#validate']);
+ 	if ($user_login_final_validate_index >= 0) {
+ 	  $form['#validate'][$user_login_final_validate_index] = '_bcm_sppstudent_final_validate';
+ 	}
+	/**/
 }
+/*
+function _bcm_sppstudent_final_validate($form, &$form_state) {
+  if (empty($form_state['uid'])) {
+    // Always register an IP-based failed login event.
+    flood_register_event('failed_login_attempt_ip', variable_get('user_failed_login_ip_window', 3600));
+    // Register a per-user failed login event.
+    if (isset($form_state['flood_control_user_identifier'])) {
+      flood_register_event('failed_login_attempt_user', variable_get('user_failed_login_user_window', 21600), $form_state['flood_control_user_identifier']);
+    }
+
+    if (isset($form_state['flood_control_triggered'])) {
+      if ($form_state['flood_control_triggered'] == 'user') {
+        form_set_error('name', format_plural(variable_get('user_failed_login_user_limit', 5), 'Sorry, there has been more than one failed login attempt for this account. It is temporarily blocked. Try again later or <a href="@url">request a new password</a>.', 'Sorry, there have been more than @count failed login attempts for this account. It is temporarily blocked. Try again later or <a href="@url">request a new password</a>.', array('@url' => url('user/password'))));
+      }
+      else {
+        // We did not find a uid, so the limit is IP-based.
+        form_set_error('name', t('Sorry, too many failed login attempts from your IP address. This IP address is temporarily blocked. Try again later or <a href="@url">request a new password</a>.', array('@url' => url('user/password'))));
+      }
+    }
+    else {
+      // Use $form_state['input']['name'] here to guarantee that we send
+      // exactly what the user typed in. $form_state['values']['name'] may have
+      // been modified by validation handlers that ran earlier than this one.
+      $query = isset($form_state['input']['name']) ? array('name' => $form_state['input']['name']) : array();
+      form_set_error('name', t('Sorry, unrecognized username or password. <a href="@password">Have you forgotten your password?</a>', array('@password' => url('user/password', array('query' => $query)))));
+      watchdog('user', 'Login attempt failed for %user.', array('%user' => $form_state['values']['name']));
+    }
+  }
+  elseif (isset($form_state['flood_control_user_identifier'])) {
+    // Clear past failures for this user so as not to block a user who might
+    // log in and out more than once in an hour.
+    flood_clear_event('failed_login_attempt_user', $form_state['flood_control_user_identifier']);
+  }
+}/**/
+
 
 
 
