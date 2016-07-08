@@ -29,11 +29,11 @@ function bcm_sppstudent_account_view() {
 
 /**
 * Form for collecting Berklee ID
-* @description : form for 'spp/account' page 
+* @description : form for 'spp/account' page
 */
 function bcm_sppstudent_account_form($form, &$form_state){
 
-	// check if this is after user entered the ID and pressed "Verify Me" button, 
+	// check if this is after user entered the ID and pressed "Verify Me" button,
 	// and if so, load the second form to create the user account.
 	if (isset($form_state['storage']['page_two'])) {
     	return bcm_sppstudent_account_create_form($form, $form_state);
@@ -43,7 +43,7 @@ function bcm_sppstudent_account_form($form, &$form_state){
 	  'welcome' => array('#markup' => '<div id="spp-welcome"><h2>Welcome to Berklee!</h2><p>Please take a moment and follow procedures. <br />We need to verify you before we create an account, so you can attend the many trainings we offer.</p></div>', '#weight'=> 0),
 	  'bcmid' => array (
 	   '#type' => 'textfield',
-	   '#title' => t('Berklee ID'), 
+	   '#title' => t('Berklee ID'),
 	   '#description' => t('Please type in your Berklee ID number without leading zero.'),
 	   '#maxlength'=> 16,
        '#size'=> 16,
@@ -51,18 +51,18 @@ function bcm_sppstudent_account_form($form, &$form_state){
 	  ),
 	  'displayname' => array (
 	   '#type' => 'hidden',
-	   '#value' => 'spp student name', 
-	  ),	  
+	   '#value' => 'spp student name',
+	  ),
 	  'submit' => array (
 	  	'#type' => 'submit',
 	  	'#value' => t('Verify Me'),
 	  	'#validate' => array('bcm_sppstudent_account_form_validate'),
 	  ),
 	);
-	return $form;	
+	return $form;
 }
 /**
-* validate callback function 
+* validate callback function
 * @description : check the length of ID and if leading zero is entered, and find the user by ID in the db table.
 *				 Also check the column 'registered' in 'bcm_sppstudent' table if the user has been created before.
 */
@@ -75,14 +75,14 @@ function bcm_sppstudent_account_form_validate($form, &$form_state){
 	else
 	{
 		$result = db_select('bcm_sppstudent', 'b')->fields('b', array('registered', 'bcmid'))->condition('b.bcmid', $id2check, '=')->execute()->fetchAssoc();
-		
-		if(!$result){ 
-			form_set_error('', t('The ID you entered is not a valid ID, please try again!'));		
+
+		if(!$result){
+			form_set_error('', t('The ID you entered is not a valid ID, please try again!'));
 		}
 		else if($result && $result['registered'] == 1)
 		{
 			form_set_error('', t('You have been created your account previously, please visit main site and log in from there. If you are sure that it is your first time visiting this page, please contact Leanring Center Staff.'));
-		}		
+		}
 	}
 }
 /**
@@ -90,29 +90,29 @@ function bcm_sppstudent_account_form_validate($form, &$form_state){
 * @description : this callback function will be called after validate success
 */
 function bcm_sppstudent_account_form_submit($form, &$form_state) {
- 
+
 		$form_state['storage']['page_two'] = TRUE;
-		$form_state['rebuild'] = TRUE; 
+		$form_state['rebuild'] = TRUE;
 }
 
 /**
-* second view form function 
+* second view form function
 * @description : form for creating the new user account, after the user is verified.
 */
 function bcm_sppstudent_account_create_form($form, $form_state)
-{	
-	$result = db_select('bcm_sppstudent', 'b')->fields('b', array('uid', 'registered', 'bcmid', 'fullname', 'barcode'))->condition('b.bcmid', $form_state['input']['bcmid'], '=')->execute()->fetchAssoc();	
+{
+	$result = db_select('bcm_sppstudent', 'b')->fields('b', array('sppid', 'registered', 'bcmid', 'fullname', 'barcode'))->condition('b.bcmid', $form_state['input']['bcmid'], '=')->execute()->fetchAssoc();
 	$bcmid = $result['bcmid']; $displayname = $result['fullname'];
 
 	$form = array (
-	 'welcome' => array( 
+	 'welcome' => array(
 	   '#type' => 'markup',
 	   '#markup' => '<h2>Welcome <b>'.$displayname.'</b></h2><p>Please enter your <i>personal</i> Email address and create a new password. (This will be your login for this system)<br /><span style="color:red; font-weight;">Please consider that you will not be able to change your Email and Password once your account is created.</span></p>',
 	   '#tree' => true,
 	  ),
 	  'bcmid' => array (
 	   '#type' => 'textfield',
-	   '#title' => t('Berklee ID'), 
+	   '#title' => t('Berklee ID'),
 	   '#value' => t($bcmid),
 	   '#description' => '',
 	   '#maxlength'=> 16,
@@ -121,7 +121,7 @@ function bcm_sppstudent_account_create_form($form, $form_state)
 	  ),
 	  'displayname' => array (
 	   '#type' => 'textfield',
-	   '#title' => t('Display Name'), 
+	   '#title' => t('Display Name'),
 	   '#value' => t($displayname),
 	   '#description' => '',
 	   '#maxlength'=> 64,
@@ -130,7 +130,7 @@ function bcm_sppstudent_account_create_form($form, $form_state)
 	  ),
 	  'email' => array (
 	   '#type' => 'textfield',
-	   '#title' => t('E-mail'), 
+	   '#title' => t('E-mail'),
 	   '#description' => 'Please type in the email address you want to use',
 	   '#maxlength'=> 64,
        '#size'=> 64,
@@ -139,7 +139,7 @@ function bcm_sppstudent_account_create_form($form, $form_state)
 	  ),
 	  'emailconfirm' => array (
 	   '#type' => 'textfield',
-	   '#title' => t('Confirm E-mail'), 
+	   '#title' => t('Confirm E-mail'),
 	   '#description' => 'Please confirm the email address',
 	   '#maxlength'=> 64,
        '#size'=> 64,
@@ -154,19 +154,19 @@ function bcm_sppstudent_account_create_form($form, $form_state)
 	  ),
 	  'occupation' => array ('#type' => 'hidden', '#value' => 'student spp',),
   	  'berkleeid' => array ('#type' => 'hidden', '#value' => $bcmid,),
-  	  'displayname' => array ('#type' => 'hidden', '#value' => $displayname,),  	  
- 	  	  	  
+  	  'displayname' => array ('#type' => 'hidden', '#value' => $displayname,),
+
 	  'submit' => array (
 	  	'#type' => 'submit',
 	  	'#value' => t('Create My Account'),
 	  	'#validate' => array('bcm_sppstudent_account_create_form_validate'),
 	  ),
 	);
-	
+
 	$form['#submit'] = array('bcm_sppstudent_account_create_form_submit');
-	return $form;	
-	
-	
+	return $form;
+
+
 }
 /**
 * validate form function
@@ -178,9 +178,9 @@ function bcm_sppstudent_account_create_form_validate($form, &$form_state){
 	if (!valid_email_address($form_state['values']['email'])) {	form_set_error('email', t('The email address is not valid!')); }
 
 	if ($form_state['values']['email'] != $form_state['values']['emailconfirm']) { form_set_error('emailconfirm', t('The email addresses do not match!'));	}
-	
+
 	if (user_load_by_name($form_state['values']['email'])) { form_set_error('', t('The email is already in use or you have created this user before! Please contact the Learning Center staff if you need to reset.'));}
-	
+
 }
 /**
 * second submit form function
@@ -199,11 +199,11 @@ function bcm_sppstudent_account_create_form_submit($form, &$form_state){
 		'field_ldap_info' => array('und' => array( 0 => array('value' => 'Summer Performance Program ',),),),
 		'field_ldap_displayname' => array('und' => array( 0 => array('value' => $form_state['input']['displayname'],),),),
 	);
-	
+
 	$newuser = user_save('', $fields);	$now = date('Y-m-d H:i:s', time());
 	$update = db_update('bcm_sppstudent')->fields(array('registered' => 1, 'created' => $now))->condition('bcmid', $form_state['input']['berkleeid'], '=')->execute();
-	drupal_set_message(t('Your account has been created, your username is "'.$newuser->name.'". Remember, we do not email your password for security reason, if you ever need to change the username and/or password, you have to contact Learning Center Staff.'));	 	
-	
+	drupal_set_message(t('Your account has been created, your username is "'.$newuser->name.'". Remember, we do not email your password for security reason, if you ever need to change the username and/or password, you have to contact Learning Center Staff.'));
+
 	$form_state['redirect'] = 'home';
 }
 
@@ -218,7 +218,7 @@ function bcm_sppstudent_init() {
   }elseif($user->uid != 0 && in_array('student spp',$user->roles)){
 		drupal_add_js(drupal_get_path('module', 'bcm_sppstudent') . '/bcm_sppstudent-logout.js');
 	}
-  
+
 }
 /**
 * Implements hook_form_FORM_ID_alter()
@@ -237,13 +237,13 @@ function bcm_sppstudent_form_user_login_alter(&$form, &$form_state){
 
 function _bcm_sppstudent_user_login_form_alter(&$form, &$form_state){
 	$form['name']['#weight'] = 1; $form['pass']['#weight'] = 2;
-	$form['sppstudent'] = array('#markup' => '<div class="messages warning"><a href="'.url("spp/account").'" style="margin-left:8px; font-style:bold; color:#000;"> * Click here to create your accout first if never logged in this site before.</a></div>', '#weight'=> 0); 
+	$form['sppstudent'] = array('#markup' => '<div class="messages warning"><a href="'.url("spp/account").'" style="margin-left:8px; font-style:bold; color:#000;"> * Click here to create your accout first if never logged in this site before.</a></div>', '#weight'=> 0);
 	$form['name']['#title'] = "Login email";
 	$form['name']['#description'] = "Your registered email address with Berklee Summer Program";
 	$form['pass']['#description'] = "The password you created for the Learning Center account";
-	
+
 	drupal_set_title("Summer Program Student Login");
-	
+
 	/* this wouldn't work currently due to "noreqnewpass" module *
 	$user_login_final_validate_index = array_search('user_login_final_validate', $form['#validate']);
  	if ($user_login_final_validate_index >= 0) {
