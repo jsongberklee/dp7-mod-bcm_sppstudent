@@ -24,7 +24,7 @@ The validator will check/find the match in "bcmid" field with the user typed id 
 
 3. Import the .csv file to "bcm_sppstudent" table in the database.
 
-** disable bcm_login and all LDAP modules to ensure.
+** disable bcm_login and all LDAP modules to avoid possible conflict.
 
 * UN-INSTALLATION / DEACTIVATE THE MODULE ****************************
 

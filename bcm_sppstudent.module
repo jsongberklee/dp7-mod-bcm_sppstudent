@@ -212,10 +212,13 @@ function bcm_sppstudent_account_create_form_submit($form, &$form_state){
 * @description : add the sppstudent login to the login link
 */
 function bcm_sppstudent_init() {
-  if(user_is_anonymous()){
-		//drupal_add_css(drupal_get_path('module', 'bcm_sppstudent') . '/bcm_sppstudent.css');
+	global $user;
+  if($user->uid == 0){
 		drupal_add_js(drupal_get_path('module', 'bcm_sppstudent') . '/bcm_sppstudent.js');
-  }
+  }elseif($user->uid != 0 && in_array('student spp',$user->roles)){
+		drupal_add_js(drupal_get_path('module', 'bcm_sppstudent') . '/bcm_sppstudent-logout.js');
+	}
+  
 }
 /**
 * Implements hook_form_FORM_ID_alter()
