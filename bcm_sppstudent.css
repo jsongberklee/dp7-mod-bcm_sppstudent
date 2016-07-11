@@ -1,0 +1,36 @@
+#bcm-sppstudent-login-block{
+  background: url(https://cdn.onelogin.com/images/brands/backgrounds/login/4fd14a00561405eaeb135c36940843f835b6f8ff.jpg?1424363163) no-repeat center center;
+  background-size: cover;
+	height: 100%;
+	width: 100%;
+	margin:0;
+	position:absolute;
+	top:0;
+	z-index:999;
+}
+#bcm-sppstudent-login-block #logo{height: 45px;}
+#login-box {
+	position:relative;
+	top: 30%;
+	text-align:center;
+  background: white;
+  border-radius: 5px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.25);
+  width: 401px;
+	font-family: "Gotham SSm 4r",Calibri,Candara,"Helvetica Neue",Arial,Helvetica,sans-serif;
+	font-size: 12px;
+	margin:auto;
+
+}
+.logo-area {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background: #191a1e;
+  padding: 1.618em 0;
+  text-align: center;
+	background-color: #404040 !important;
+	border-color: #272727 !important;
+}
+.bcm-spp-buttons{padding:1em;}

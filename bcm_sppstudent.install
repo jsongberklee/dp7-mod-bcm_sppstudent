@@ -80,7 +80,7 @@ function bcm_sppstudent_schema() {
  */
 function bcm_sppstudent_install() {
 drupal_set_message(t("bcm_sppstudent table(bcm_sppstudent) and the fields(sppid, bcmid, fullname, firstname, lastname, barcode, created) are created "), 'status');
-/* test insert */
+/* test insert *
 db_insert('bcm_sppstudent')->fields(array('bcmid' => '717745','fullname' => 'Abraham,Moses','barcode' => '52178',))->execute();
 db_insert('bcm_sppstudent')->fields(array('bcmid' => '759297','fullname' => 'Acha Aleman,Martinique','barcode' => '000147943',))->execute();
 db_insert('bcm_sppstudent')->fields(array('bcmid' => '765864','fullname' => 'Aguirre,Rene','barcode' => '000099496',))->execute();

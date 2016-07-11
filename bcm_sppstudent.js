@@ -73,5 +73,11 @@ jQuery(document).ready(function($) {
     if (isOpen) {
       hideLogin()
     }
-  })
+  });
+	
+	if(Drupal.settings.bcm_sppstudent.login == 1){
+		$('body').prepend('<div id="bcm-sppstudent-login-block"><div id="login-box"><div class="logo-area"><img alt="0c805db401739637f6b994b6757b5a91cb13dacc" id="logo" src="https://cdn.onelogin.com/images/brands/logos/login/0c805db401739637f6b994b6757b5a91cb13dacc.png?1435008338"></div><div class="bcm-spp-buttons"><ul><li><a class="button" href="'+ssolink+'" class="login" title="">Campus students, faculty, staff, and alumni<span class="description"></span></a></li><li><a class="button" href="/user?destination='+Drupal.settings.bcm_sppstudent.dest+'" class="login" title="">Summer Program Student<span class="description"></span></a></li></ul></div></div></div>');
+	// for LC logo version
+	/* 		$('body').prepend('<div id="bcm-sppstudent-login-block"><div id="login-box"><div class="logo-area"><img alt="0c805db401739637f6b994b6757b5a91cb13dacc" id="logo" src="/sites/all/themes/jjamerson/logo-lc-mobile.svg"></div><div class="bcm-spp-buttons"><ul><li><a class="button" href="'+ssolink+'" class="login" title="">Campus students, faculty, staff, and alumni<span class="description"></span></a></li><li><a class="button" href="/user'+Drupal.settings.bcm_sppstudent.dest+'" class="login" title="">Summer Program Student<span class="description"></span></a></li></ul></div></div></div>'); */
+	}
 });
