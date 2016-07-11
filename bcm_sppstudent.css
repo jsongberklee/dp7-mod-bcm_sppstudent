@@ -11,17 +11,17 @@
 #bcm-sppstudent-login-block #logo{height: 45px;}
 #login-box {
 	position:relative;
-	top: 30%;
+	top:30%;
 	text-align:center;
   background: white;
   border-radius: 5px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   box-shadow: 0 0 5px rgba(0,0,0,0.25);
-  width: 401px;
 	font-family: "Gotham SSm 4r",Calibri,Candara,"Helvetica Neue",Arial,Helvetica,sans-serif;
 	font-size: 12px;
-	margin:auto;
+	margin:0 auto;
+	max-width: 320px;
 
 }
 .logo-area {
