@@ -81,3 +81,14 @@ jQuery(document).ready(function($) {
 	/* 		$('body').prepend('<div id="bcm-sppstudent-login-block"><div id="login-box"><div class="logo-area"><img alt="0c805db401739637f6b994b6757b5a91cb13dacc" id="logo" src="/sites/all/themes/jjamerson/logo-lc-mobile.svg"></div><div class="bcm-spp-buttons"><ul><li><a class="button" href="'+ssolink+'" class="login" title="">Campus students, faculty, staff, and alumni<span class="description"></span></a></li><li><a class="button" href="/user'+Drupal.settings.bcm_sppstudent.dest+'" class="login" title="">Summer Program Student<span class="description"></span></a></li></ul></div></div></div>'); */
 	}
 });
+jQuery(window).load(function(e){
+	if(jQuery(e.target).width() < 768){
+		
+		console.log(jQuery('.mobileMenu .block-menu:eq(0) .menu li:eq(2) a'));
+		
+		jQuery('.mobileMenu .block-menu:eq(0) .menu li:eq(2) a').text('LOGIN (Campus students, faculty, staff, and alumni)');
+		jQuery('.mobileMenu .block-menu:eq(0) .menu').append('<li><a href="/user">LOGIN (Summer Program Student)</a></li>');
+	}
+
+	//if(jQuery(e.target).width() < 768) jQuery('.mobileMenu .block-menu:eq(0) .menu .menu li:eq(2) a').attr('href', '/user/logout');
+});
