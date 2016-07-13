@@ -83,12 +83,7 @@ jQuery(document).ready(function($) {
 });
 jQuery(window).load(function(e){
 	if(jQuery(e.target).width() < 768){
-		
-		console.log(jQuery('.mobileMenu .block-menu:eq(0) .menu li:eq(2) a'));
-		
 		jQuery('.mobileMenu .block-menu:eq(0) .menu li:eq(2) a').text('LOGIN (Campus students, faculty, staff, and alumni)');
 		jQuery('.mobileMenu .block-menu:eq(0) .menu').append('<li><a href="/user">LOGIN (Summer Program Student)</a></li>');
 	}
-
-	//if(jQuery(e.target).width() < 768) jQuery('.mobileMenu .block-menu:eq(0) .menu .menu li:eq(2) a').attr('href', '/user/logout');
 });
